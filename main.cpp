@@ -1,28 +1,48 @@
-#include <bitset>
 #include "mars.h"
+#include <bitset>
 
 int main()
 {
-	Mars m;
-	const word32 userKey[4] = { 0b10101000101011111100000011001110, 0b11111101000101111000011111100110, 0b00111100011110001111001101011101, 0b11001110011100100111010110100000 };
-	word32 key[40] = { 0 };
-	word32 inblock[4] = { 0, 3, 4, 5 };
-	word32 outblock[4] = { 0 };
-	word32 resblock[4] = { 0 };
+	//key (4 words - 14 words) (128bits - 448bits) (1 word - 4 symbols) => min = 16 symbols
+	std::vector<u4byte> key;
+	std::vector<u4byte> text;
+	std::vector<u4byte> entext;
+	std::vector<u4byte> detext;
+	
+	Mars mars;
+	mars.ReadFromFile("C:/Users/Anna/Desktop/ciphers/text/text1.txt", text);
+	//mars.ReadFromFile("C:/Users/Anna/Desktop/ciphers/text/cat.bmp", text);
+	//mars.ReadFromFile("C:/Users/Anna/Desktop/ciphers/text/p.jpg", text);
+	//mars.ReadFromFile("C:/Users/Anna/Desktop/ciphers/text/g.png", text);
 
-	m.MakeKey(userKey, 1, key);
-	std::cout << "Original: " << inblock[0] << std::endl;
-	m.Encryption(key, inblock, outblock);
-	std::cout << "Encrypted: " << outblock[0] << std::endl;
-	m.Decryption(key, outblock, resblock);
-	std::cout << "Decrypted: " << resblock[0] << std::endl;
-
+	mars.ReadFromFile("C:/Users/Anna/Desktop/ciphers/key/key1.txt", key);
+	mars.SetKey(key);
+	mars.EncryptMessage(text, entext);
+	mars.DecryptMessage(entext, detext);
+	
+	
+	mars.WriteToFile("C:/Users/Anna/Desktop/original.txt", text);
+	mars.WriteToFile("C:/Users/Anna/Desktop/encrypted.txt", entext);
+	mars.WriteToFile("C:/Users/Anna/Desktop/result.txt", detext);
+	
+	
+	/*
+	mars.WriteToFile("C:/Users/Anna/Desktop/original.bmp", text);
+	mars.WriteToFile("C:/Users/Anna/Desktop/encrypted.bmp", entext);
+	mars.WriteToFile("C:/Users/Anna/Desktop/result.bmp", detext);
+	*/
+	
+	/*
+	mars.WriteToFile("C:/Users/Anna/Desktop/original.jpg", text);
+	mars.WriteToFile("C:/Users/Anna/Desktop/encrypted.jpg", entext);
+	mars.WriteToFile("C:/Users/Anna/Desktop/result.jpg", detext);
+	*/
 
 	/*
-	std::bitset<64> b1(0b10010101000101011111100000011000);
-	std::bitset<64> b2(_rotl(b1.to_ulong(), 4));
-	std::cout << b1 << std::endl;
-	std::cout << b2 << std::endl;
+	mars.WriteToFile("C:/Users/Anna/Desktop/original.png", text);
+	mars.WriteToFile("C:/Users/Anna/Desktop/encrypted.png", entext);
+	mars.WriteToFile("C:/Users/Anna/Desktop/result.png", detext);
 	*/
+
 	return 0;
 }
